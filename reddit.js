@@ -129,6 +129,57 @@ module.exports = function RedditAPI(conn) {
           }
         }
       );
-    }
+    },
+    getAllPostsForUser: function(userId, options, callback) {
+      // In case we are called without an options parameter, shift all the parameters manually
+      
+      if (!callback) {
+        callback = options;
+        options = {};
+      }
+      var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
+      var offset = (options.page || 0) * limit;
+      
+      var sqlQuery = `
+        SELECT posts.id AS posts_id, posts.title AS posts_title, 
+        posts.url AS posts_url, posts.createdAt AS posts_createdAt, 
+        posts.updatedAt AS posts_updatedAt, posts.userId AS posts_userId,
+        users.id AS users_id, users.username AS users_username, 
+        users.createdAt AS users_createdAt, users.updatedAt AS users_updatedAt
+        FROM posts
+        JOIN users
+        ON posts.userId=users.id
+        WHERE users.id=${userId}  
+        
+        ORDER BY posts.createdAt DESC
+        LIMIT ? OFFSET ?
+        `
+      conn.query(sqlQuery, [limit, offset],
+        function(err, results) {
+          if (err) {
+            callback(err);
+          } 
+          else {
+            callback(results.map(function(obj) {
+              var rObj = {};
+              rObj.id = obj.posts_id;
+              rObj.title = obj.posts_title;
+              rObj.url = obj.posts_url;
+              rObj.createdAt = obj.posts_createdAt;
+              rObj.updatedAt = obj.posts_updatedAt;
+              rObj.userId = obj.posts_userId;
+              rObj.users = {}
+                  rObj.users.id = obj.users_id;
+                  rObj.users.username = obj.users_username;
+                  rObj.users.createdAt = obj.users_createdAt;
+                  rObj.users.updatedAt = obj.users_updatedAt;
+              return rObj;
+            }));
+          }
+        }
+      );
+    },
+    
+    
   }
 }
