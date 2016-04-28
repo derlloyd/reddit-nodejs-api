@@ -35,3 +35,8 @@ CREATE TABLE `subreddits` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
