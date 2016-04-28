@@ -95,7 +95,7 @@ module.exports = function RedditAPI(conn) {
       var offset = (options.page || 0) * limit;
       
       conn.query(`
-        SELECT \`id\`,\`title\`,\`url\`,\`userId\`, \`createdAt\`, \`updatedAt\`
+        SELECT \`id\`,\`title\`,\`url\`, \`createdAt\`, \`updatedAt\`,\`userId\`
         FROM \`posts\`
         ORDER BY \`createdAt\` DESC
         LIMIT ? OFFSET ?
