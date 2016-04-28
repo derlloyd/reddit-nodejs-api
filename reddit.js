@@ -159,6 +159,10 @@ module.exports = function RedditAPI(conn) {
           if (err) {
             callback(err);
           } 
+          else if (results.length === 0) {
+            console.log("User ID does not exist");
+            return;
+          }
           else {
             callback(results.map(function(obj) {
               var rObj = {};
