@@ -49,3 +49,6 @@ ADD CONSTRAINT `subreddits_ibfk_1`
 FOREIGN KEY (`subredditId`) 
 REFERENCES `subreddits` (`id`)
 
+UPDATE posts
+SET subredditId=4
+WHERE id=3

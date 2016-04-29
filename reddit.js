@@ -98,12 +98,21 @@ module.exports = function RedditAPI(conn) {
       conn.query(`
         SELECT posts.id AS posts_id, posts.title AS posts_title, 
         posts.url AS posts_url, posts.createdAt AS posts_createdAt, 
-        posts.updatedAt AS posts_updatedAt, posts.userId AS posts_userId,
+        posts.updatedAt AS posts_updatedAt, 
+        posts.userId AS posts_userId, posts.subredditId AS posts_subredditId,
+        
+        subreddits.id AS subreddit_id, subreddits.name AS subreddit_name,
+        subreddits.description AS subreddit_description, 
+        subreddits.createdAt AS subreddit_createdAt,
+        subreddits.updatedAt AS subreddit_updatedAt,
+        
         users.id AS users_id, users.username AS users_username, 
         users.createdAt AS users_createdAt, users.updatedAt AS users_updatedAt
         FROM posts
         JOIN users
         ON posts.userId=users.id
+        JOIN subreddits
+        ON posts.subredditId=subreddits.id
         ORDER BY posts.createdAt DESC
         LIMIT ? OFFSET ?
         `, [limit, offset],
@@ -125,6 +134,13 @@ module.exports = function RedditAPI(conn) {
                   rObj.users.username = obj.users_username;
                   rObj.users.createdAt = obj.users_createdAt;
                   rObj.users.updatedAt = obj.users_updatedAt;
+              rObj.subredditId = obj.posts_subredditId;
+              rObj.subreddit = {};
+                  rObj.subreddit.id = obj.subreddit_id;
+                  rObj.subreddit.name = obj.subreddit_name;
+                  rObj.subreddit.description = obj.subreddit_description;
+                  rObj.subreddit.createdAt = obj.createdAt;
+                  rObj.subreddit.updatedAt = obj.updatedAt;
               return rObj;
             }));
           }
