@@ -227,5 +227,36 @@ module.exports = function RedditAPI(conn) {
         }
       );
     },
+    createSubreddit: function(sub, callback) {
+        conn.query(
+          'INSERT INTO `subreddits` (`name`, `description`, `createdAt`) VALUES (?, ?, ?)', [sub.name, sub.description, null],
+          function(err, result) {
+            if (err) {
+              callback(err);
+            }
+            else {
+              /*
+              sub inserted successfully. Let's use the result.insertId to retrieve
+              the sub and send it to the caller!
+              */
+              conn.query(
+                'SELECT `id`,`name`,`description`, `createdAt`, `updatedAt` FROM `subreddits` WHERE `id` = ?', [result.insertId],
+                function(err, result) {
+                  if (err) {
+                    callback(err);
+                  }
+                  else {
+                    callback(result[0]);
+                  }
+                }
+              );
+            }
+          }
+        );
+      },  
+      
+    
+    
+    
   }
 }

@@ -48,3 +48,4 @@ ALTER TABLE posts
 ADD CONSTRAINT `subreddits_ibfk_1` 
 FOREIGN KEY (`subredditId`) 
 REFERENCES `subreddits` (`id`)
+
