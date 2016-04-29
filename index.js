@@ -39,5 +39,6 @@ var redditAPI = reddit(connection);
 
 
 // redditAPI.createSubreddit({name: 'cats', description: 'all about cats'}, console.log);
-redditAPI.getAllSubreddits(console.log);
+// redditAPI.getAllSubreddits(console.log);
+redditAPI.createPost({userId: '2', title: 'this is a post about something', url: 'www.google.com', subredditId: '3'  }, console.log);
 
