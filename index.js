@@ -38,5 +38,6 @@ var redditAPI = reddit(connection);
 // });
 
 
-redditAPI.createSubreddit({name: 'cats', description: 'all about cats'}, console.log);
+// redditAPI.createSubreddit({name: 'cats', description: 'all about cats'}, console.log);
+redditAPI.getAllSubreddits(console.log);
 

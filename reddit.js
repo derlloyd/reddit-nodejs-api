@@ -254,7 +254,47 @@ module.exports = function RedditAPI(conn) {
           }
         );
       },  
+      getAllSubreddits: function(callback) {
+      // In case we are called without an options parameter, shift all the parameters manually
+      // if (!callback) {
+      //   callback = options;
+      //   options = {};
+      // }
+      // var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
+      // var offset = (options.page || 0) * limit;
       
+      conn.query(`
+        SELECT subreddits.id AS subreddits_id, subreddits.name AS subreddits_name, 
+        subreddits.description AS subreddits_description, subreddits.createdAt AS subreddits_createdAt, 
+        subreddits.updatedAt AS subreddits_updatedAt
+        FROM subreddits
+        ORDER BY subreddits.createdAt DESC
+        `,
+        function(err, results) {
+          if (err) {
+            callback(err);
+          }
+          else {
+            callback(results);
+            // callback(results.map(function(obj) {
+            //   var rObj = {};
+            //   rObj.id = obj.posts_id;
+            //   rObj.title = obj.posts_title;
+            //   rObj.url = obj.posts_url;
+            //   rObj.createdAt = obj.posts_createdAt;
+            //   rObj.updatedAt = obj.posts_updatedAt;
+            //   rObj.userId = obj.posts_userId;
+            //   rObj.users = {}
+            //       rObj.users.id = obj.users_id;
+            //       rObj.users.username = obj.users_username;
+            //       rObj.users.createdAt = obj.users_createdAt;
+            //       rObj.users.updatedAt = obj.users_updatedAt;
+            //   return rObj;
+            // }));
+          }
+        }
+      );
+    },
     
     
     
