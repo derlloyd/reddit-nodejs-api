@@ -36,7 +36,15 @@ CREATE TABLE `subreddits` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--  add a subredditId column to the posts table, with associated foreign key. 
+
+ALTER TABLE posts 
+ADD COLUMN subredditId INT(11) DEFAULT NULL
+
+-- then
 
 
-
-
+ALTER TABLE posts
+ADD CONSTRAINT `subreddits_ibfk_1` 
+FOREIGN KEY (`subredditId`) 
+REFERENCES `subreddits` (`id`)
